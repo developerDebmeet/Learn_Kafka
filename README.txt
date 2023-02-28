@@ -81,4 +81,34 @@ Multiple consumers on one topic
     to create distinct consumer groups, use the consumer property : group.id
 
 
+Consumer Offsets
+    Kafka stores the offsets at which a consumer group has been reading
+    the offsets committed are in Kfka topic named __consumer_offsets
+    When a consumer in a grp has processed data received from Kafka, it should periodically commit the offsets
+        the kafka broker will write to __consumer_offsets, not the group itself
+    if a consumer dies, it will be able to read back from where it left off thanks to the committed consumer offsets
+
+
+Delivery semantics for consumers
+    by default, java consumers will automatically commit offsets(at least once)
+    there are 3 delivery semantics if we choose to commit manually
+    at least once is usually preferred
+        offsets are committed after the message is processed
+        if the processing goes wrong the message will be read again
+        this can result in duplicate processing of messages. Make sure your processing is idempotent(ie processing again the messages will not impact the system)
+    at most once
+        offsets are committed as soon as messages are received
+        if the processing goes wrong, some messages will be lost(they wont be read again)
+    exactly once
+        for kafka to kafka workflows : use the transactional API - easy with kafka streams API
+        for kafka to external system workflows - use an idempotent consumer
+
+
+Kafka Brokers
+    a kafka cluster is composed of multiple brokers(servers)
+    each broker is identified with its ID (integer)
+    each broker contains certain topic partitions
+    after connecting to any broker( called a bootstrap broker) we will be connected to the entire cluster ( kafka clients have smart mechanics for that)
+
+
 
