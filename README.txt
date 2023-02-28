@@ -184,5 +184,12 @@ Zookeeper
         kafka 3.x now implements the Raft protocol (KRaft) in order to replace Zookeeper
 
 
+Starting Kafka :
+    java 11 + latest kafka
+    add kafka to path
+    zookeeper-server-start.sh ~/kafka_2.13-3.4.0/config/zookeeper.properties
+    kafka-server-start.sh ~/kafka_2.13-3.4.0/config/server.properties
+
+
 
 
