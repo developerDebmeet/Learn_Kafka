@@ -3,4 +3,4 @@ Kafka Topic : a particular stream of data within a kafka cluster
     as many topics as needed
     topic is identified by name
     any format
-    sequence of messages is called a data stream[hence kafka is called a data streaming platform]
+    sequence of messages is called a data stream[hence kafka is called a data streaming platform].
