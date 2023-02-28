@@ -163,4 +163,26 @@ Kafka topic durability
     as a rule, for a replication factor of N, we can lose up to N-1 brokers and still recover full data.
 
 
+Zookeeper
+    zookeeper manages brokers ( keeps a list of them )
+    zookeeper helps in performing leader election for partitions
+    zookeeper sends notifications to kafka in case of changes
+        eg new topic/broker dies/broker comes up/ delete topics etc
+    kafka 2.x cannot work without Zookeeper
+    kafka 3.x can work without Zookeeper (KIP-500) - using Kafka Raft instead
+    kafka 4.x will not have zookeeper
+    zookeeper by design operates with an odd number of servers ( 1,3,5,7 )
+    zookeeper has a leader(writes) the rest of the servers are followers(reads)
+    Zookeeper does NOT store consumer offsets with kafka > v0.10
+    Zookeeper shows scaling issues when kafka clusters have > 100,000 partitions
+    by removing Zookeeper, Apache Kafka can
+        scale to millions of partitions, and becomes easier to maintain and set-up
+        improve stability, makes it easier to monitor, support and administer
+        single security model for the whole system
+        single process to start with kafka
+        faster controller shutdown and recovery time
+        kafka 3.x now implements the Raft protocol (KRaft) in order to replace Zookeeper
+
+
+
 
