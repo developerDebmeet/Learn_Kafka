@@ -57,6 +57,28 @@ Kafka Message Serializer
         protobuf
 
 
+Consumers
+    consumers read data from a topic(identified by name) - pull model
+    consumers know which broker to read from
+    in case of broker failures consumers can recover
+    data is read in order from low to high offset within each partitions
+
+
+Consumer deserializer
+    deserialize indicates how to transform bytes into objects/data
+    they are used on the value and the key of the message
+    the serialization/deserialization type must not change during a topic lifecycle(create a new topic instead if needed)
+
+
+Consumer Groups
+    all the consumers in an application read data as a consumer group
+    each consumer within a group reads from exclusive partitions
+    if we have more consumers than partitions, some consumers will be inactive
+
+
+Multiple consumers on one topic
+    in apache kafka it is acceptable to have multiple consumer groups on the same topic
+    to create distinct consumer groups, use the consumer property : group.id
 
 
 
