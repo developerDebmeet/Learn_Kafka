@@ -6,6 +6,7 @@ Kafka Topic : a particular stream of data within a kafka cluster
     sequence of messages is called a data stream[hence kafka is called a data streaming platform].
     we cannot query topics, instead, we use Kafka Producers to send data and Kafka Consumers to read the data
 
+
 Partitions and offsets
     topics can be split into partitions
         messages within each partition are ordered
@@ -18,4 +19,44 @@ Partitions and offsets
     Order is guaranteed only within a partition (not across partitions)
     Data is assigned randomly to a partition unless a key is provided
     we can have as many partitions per topic as we want
+
+
+Producers
+    producers write data to topics(topics are made of partitions)
+    the load is balanced to many brokers thanks to the number of partitions
+    producers know to which partition to write to (and which kafka broker[server] has it)
+    in case of kafka broker failure, producers will automatically recover
+    Message keys
+        producers can choose to send a key with the message( string, number, binary etc)
+        if key==null, data is sent in round robin manner
+        if key!=null, then all messages for that key will always go to the same partition(hashing)
+    a kafka partitioner is a code logic that takes a record and determines to which partition to send it to
+        key hashing is the process of determining the mapping of a key to a partition
+        in the default kafka partitioner, the keys are hashed using the murmur2 algorithm
+            targetPartition = Math.abs(Utils.murmur2(keyBytes)) % (numPartitions - 1)
+
+
+Kafka Message anatomy
+    key-binary - can be null
+    value-binary - can be null
+    compression type : none/gzip/snappy/lz4/zstd
+    headers - optional
+    partition + offset
+    timestamp -  set by system or user
+
+
+Kafka Message Serializer
+    kafka only accepts bytes as a n input from producers and sends bytes out as an output to consumers
+    message serialization means transforming objects/data into bytes
+    they are used on the value and the key
+    common serializers
+        string
+        json
+        int/float
+        avro
+        protobuf
+
+
+
+
 
