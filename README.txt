@@ -108,7 +108,59 @@ Kafka Brokers
     a kafka cluster is composed of multiple brokers(servers)
     each broker is identified with its ID (integer)
     each broker contains certain topic partitions
-    after connecting to any broker( called a bootstrap broker) we will be connected to the entire cluster ( kafka clients have smart mechanics for that)
+    after connecting to any broker( called a bootstrap broker) we will be connected to the entire cluster
+        ( kafka clients have smart mechanics for that)
+    a good number to get started is 3 brokers, but some big clusters have over 100 brokers
+
+
+Brokers and topics
+    example : a topic A with 3 partitions and a topic B with 2 partitions
+        Broker 101 : topic A, Partition 0 + topic B, Partition 1
+        Broker 102 : topic A, Partition 2 + topic B, Partition 0
+        Broker 103 : topic A, Partition 1
+        hence the data is distributed and broker 103 does not have any topic B data
+
+    Kafka broker discovery
+        every kafka broker is called a bootstrap server
+        that means we only need to connect to one broker and the kafka clients will know how to be connected to the entire cluster(smart clients)
+        each broker knows about all brokers, topics and partitions(metadata)
+
+
+Topic replication factor
+    topics should have a replication factor > 1 (usually between 2 and 3)
+    this way if a broker is down, another broker can serve the data
+    Example topic A with 2 partitions
+        Broker 101 :       A,0
+        Broker 102 : A,1 + A,0
+        Broker 103 : A,1
+    This basically introduces some redundancy, and it helps make system resilient in case lets say Broker 102 is down, we still have all required data
+
+
+Concept of leader for a partition
+    at any time only one broker can be a leader for a given partition
+    producers can only send data to the broker that is the leader of a partition
+    Example topic A with 2 partitions
+        Broker 101 :       A,0 (leader)
+        Broker 102 : A,1 (leader) + A,0
+        Broker 103 : A,1
+    the other brokers will replicate the data
+    therefore each partition has one leader and multiple ISR ( in sync replica)
+    kafka consumers by default will read from the leader broker for a partition
+    Kafka consumers replica fetching (kafka v2.4+)
+        it is possible to configure consumers to read from the closest replica
+        this may help improve latency, and also decrease network costs if using the cloud
+
+
+Producer Acknowledgements (acks)
+    producers can choose to receive ack of data writes:
+        acks=0 : producer wont wait for ack (possible data loss)
+        acks=1 : producer will wait for leader ack (limited data loss)
+        acks=all : leader + replicas acknowledgement (no data loss)
+
+
+Kafka topic durability
+    for a topic replication factor of 3, topic data durability can withdtand 2 brokers loss
+    as a rule, for a replication factor of N, we can lose up to N-1 brokers and still recover full data.
 
 
 
