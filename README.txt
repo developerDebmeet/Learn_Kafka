@@ -191,5 +191,16 @@ Starting Kafka :
     kafka-server-start.sh ~/kafka_2.13-3.4.0/config/server.properties
 
 
+Kafka CLI
+    kafka-topics.sh
+    try to use --bootstrap-server option, not --zookeeper
+    kafka-topics.sh --bootstrap-server localhost:9092 --topic first_topic --create
+    kafka-topics.sh --bootstrap-server localhost:9092 --topic second_topic --create --partitions 5
+    kafka-topics.sh --bootstrap-server localhost:9092 --topic third_topic --create --replication-factor 3
+    kafka-topics.sh --bootstrap-server localhost:9092 --list
+    kafka-topics.sh --bootstrap-server localhost:9092 --topic first_topic --describe
+    kafka-topics.sh --bootstrap-server localhost:9092 --topic second_topic --delete
+
+
 
 
